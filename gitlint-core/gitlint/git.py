@@ -429,6 +429,9 @@ class StagedLocalGitCommit(GitCommit, PropertyCache):
     @property
     @cache
     def author_name(self):
+        name = os.getenv("GIT_AUTHOR_NAME")
+        if name is not None:
+            return name
         try:
             return _git("config", "--get", "user.name", _cwd=self.context.repository_path).strip()
         except GitExitCodeError as e:
@@ -437,6 +440,9 @@ class StagedLocalGitCommit(GitCommit, PropertyCache):
     @property
     @cache
     def author_email(self):
+        email = os.getenv("GIT_AUTHOR_EMAIL")
+        if email is not None:
+            return email
         try:
             return _git("config", "--get", "user.email", _cwd=self.context.repository_path).strip()
         except GitExitCodeError as e:
